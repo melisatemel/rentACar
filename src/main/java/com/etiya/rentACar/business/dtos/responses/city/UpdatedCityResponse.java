@@ -6,14 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data                   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class CreatedCityResponse {
+public class UpdatedCityResponse {
     private int id;
     private String name;
     private LocalDateTime createdDate;
 }
-
-
-

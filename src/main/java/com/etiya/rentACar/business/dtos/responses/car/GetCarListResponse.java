@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor     //Parametreli constructor   oluşturur
 public class GetCarListResponse {
     private int id;
+    private String cityName;
     private int modelYear;
     private String plate;
     private int state;
     private double dailyPrice;
     private int modelId;
-    private String modelname;
+    private String modelName;
 }

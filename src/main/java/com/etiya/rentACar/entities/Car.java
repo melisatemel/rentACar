@@ -38,9 +38,10 @@ public class Car extends BaseEntity {
     @JoinColumn(name="model_id") //FK
     private Model model;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rentalBranchId")
     private RentalBranch rentalBranch;
+
 
     @OneToMany(mappedBy = "car")
     private List<Rental> rentals;

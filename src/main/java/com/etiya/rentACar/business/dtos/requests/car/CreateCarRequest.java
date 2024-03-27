@@ -27,4 +27,7 @@ public class CreateCarRequest {
 
     @NotNull(message = "Model Year cannot be empty!")
     private int modelId;
+
+    @NotNull(message = "Rental Branch ID cannot be empty!")
+    private int rentalBranchId;
 }

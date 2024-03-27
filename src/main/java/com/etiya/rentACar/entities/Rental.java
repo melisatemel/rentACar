@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 @Table(name="rentals")
 public class Rental extends BaseEntity {
     //customerid, rentalbranchid
-
-    @Column(name="customerId")
-    private int customerId;
+//
+//    @Column(name="customerId")
+//    private int customerId;
 
     @Column(name="startDate")
     private LocalDateTime startDate;

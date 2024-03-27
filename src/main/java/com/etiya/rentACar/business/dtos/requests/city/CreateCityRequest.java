@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data                   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
 @NoArgsConstructor      // Parametresiz constructor oluşturur
 @AllArgsConstructor     //Parametreli constructor   oluşturur
-public class CrateCityRequest {
+public class CreateCityRequest {
     @NotEmpty(message = "City name cannot be empty!")
     @Size(min=2, max = 30)
     private String name;

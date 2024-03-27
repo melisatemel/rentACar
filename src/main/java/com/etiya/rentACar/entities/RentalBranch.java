@@ -18,7 +18,7 @@ public class RentalBranch extends BaseEntity {
     //şirket gibi ?
     //city id,carid ile ilşişkili
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cityId")
     private City city;
 
