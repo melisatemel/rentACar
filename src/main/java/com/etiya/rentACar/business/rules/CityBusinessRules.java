@@ -22,4 +22,11 @@ public class CityBusinessRules {
         }
     }
 
+    public void isCityAvailable(int id){
+        Optional<City> city = cityRepository.findById(id);
+        if(city.isEmpty()){
+            throw new BusinessException("City not found");
+        }
+    }
+
 }

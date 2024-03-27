@@ -57,6 +57,7 @@ public class RentalBranchManager implements RentalBranchService {
     @Override
     public UpdatedRentalBranchResponse update(UpdateRentalBranchRequest updateRentalBranchRequest) {
         rentalBranchBusinessRules.isRentalBranchAvailable(updateRentalBranchRequest.getId());
+        rentalBranchBusinessRules.checkIfCityExists(updateRentalBranchRequest.getId());
         RentalBranch rentalBranch = rentalBranchRepository.findById(updateRentalBranchRequest.getId()).get();
         RentalBranch mappedRentalBranch = modelMapperService.forRequest().map(updateRentalBranchRequest,RentalBranch.class);
         mappedRentalBranch.setCreatedDate(rentalBranch.getCreatedDate());

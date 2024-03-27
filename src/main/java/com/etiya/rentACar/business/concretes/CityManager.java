@@ -64,4 +64,9 @@ public class CityManager implements CityService {
     public void delete(int id) {
         cityRepository.deleteById(id);
     }
+
+    @Override
+    public void isCityAvailable(int id) {
+        cityBusinessRules.isCityAvailable(id);
+    }
 }

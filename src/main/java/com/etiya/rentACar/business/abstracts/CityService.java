@@ -13,4 +13,5 @@ public interface CityService {
     List<GetCityListResponse> getAll();
     GetCityResponse getById(int id);
     void delete(int id);
+    void isCityAvailable(int id);
 }
