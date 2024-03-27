@@ -7,6 +7,7 @@ import com.etiya.rentACar.business.dtos.responses.car.CreatedCarResponse;
 import com.etiya.rentACar.business.dtos.responses.car.GetCarListResponse;
 import com.etiya.rentACar.business.dtos.responses.car.GetCarResponse;
 import com.etiya.rentACar.business.dtos.responses.car.UpdatedCarResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -31,12 +32,12 @@ public class CarsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedCarResponse add(CreateCarRequest createCarRequest) {
+    public CreatedCarResponse add(@Valid  @RequestBody CreateCarRequest createCarRequest) {
         return carService.add(createCarRequest);
     }
 
     @PutMapping
-    public UpdatedCarResponse update(UpdateCarRequest updateCarRequest) {
+    public UpdatedCarResponse update(@Valid@RequestBody UpdateCarRequest updateCarRequest) {
         return carService.update(updateCarRequest);
     }
 

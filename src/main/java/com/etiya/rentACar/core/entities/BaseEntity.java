@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class BaseEntity {
     @Id                 //primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY) //strateji belirler, (identity nin 1 arttırılması stratejisi kullandık burada)
-
     @Column(name="id")
     private int id;
 

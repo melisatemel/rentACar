@@ -34,7 +34,7 @@ public class CityController {
     }
 
     @PutMapping //Güncelleme
-    public UpdatedCityResponse update(@RequestBody UpdateCityRequest updateCityRequest) {
+    public UpdatedCityResponse update(@Valid@RequestBody UpdateCityRequest updateCityRequest) {
         return cityService.update(updateCityRequest);
     }
     @DeleteMapping("/{id}")
