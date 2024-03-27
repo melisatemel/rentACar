@@ -38,12 +38,12 @@ public class BrandsController {
 
     @PostMapping    //Veri EKLEME
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedBrandResponse add(@Valid CreateBrandRequest createBrandRequest) {
+    public CreatedBrandResponse add(@Valid @RequestBody CreateBrandRequest createBrandRequest) {
         return brandService.add(createBrandRequest);    //createBrandRequest' i, brandService'e gönder
     }
 
     @PutMapping //Güncelleme
-    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest) {
+    public UpdatedBrandResponse update(@Valid @RequestBody UpdateBrandRequest updateBrandRequest) {
         return brandService.update(updateBrandRequest);
     }
 
