@@ -1,17 +1,21 @@
 package com.etiya.rentACar.entities;
 
 import com.etiya.rentACar.core.entities.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor     //Parametreli constructor   oluşturur
+@Data
 @NoArgsConstructor
-@Entity     //veritabanı tablosudur
-@Table(name="orders")
+@AllArgsConstructor
+@Entity
+@Table(name="invoices")
 public class Invoice extends BaseEntity {
     @Column(name = "totalPrice")
     private double totalPrice;
+
+    @ManyToOne()
+    @JoinColumn(name="rentalId")
+    private Rental rental;
 }

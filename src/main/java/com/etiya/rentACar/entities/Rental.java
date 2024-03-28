@@ -7,14 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="rentals")
 public class Rental extends BaseEntity {
-    //customerid, rentalbranchid
 
 
     @Column(name="startDate")
@@ -24,7 +24,7 @@ public class Rental extends BaseEntity {
     private LocalDateTime endDate;
 
     @Column(name="returnDate")
-    private LocalDateTime returnDate;   //esas getirdiği tarih
+    private LocalDateTime returnDate;
 
     @Column(name="startKilometer")
     private double startKilometer;
@@ -39,4 +39,7 @@ public class Rental extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "customerId")
     private Customer customer;
+
+    @OneToMany(mappedBy = "rental")
+    private List<Invoice> invoices;
 }

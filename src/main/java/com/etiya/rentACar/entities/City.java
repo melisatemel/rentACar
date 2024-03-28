@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="cities")
 public class City extends BaseEntity {
     @Column(name="name")

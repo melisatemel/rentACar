@@ -13,7 +13,7 @@ import java.util.List;
 @RestController //Restful yapısın demek yani erişim noktası
 @AllArgsConstructor
 @RequestMapping("api/v1/cities")
-public class CityController {
+public class CitiesController {
 
     private CityService cityService;
 

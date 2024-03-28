@@ -8,10 +8,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="cars")
 public class Car extends BaseEntity {
     @Column(name = "name")
@@ -22,7 +22,6 @@ public class Car extends BaseEntity {
 
     @Column(name="kilometer")
     private double kilometer;
-                                         //Fields
 
     @Column(name="modelYear")
     private int modelYear;
@@ -33,15 +32,13 @@ public class Car extends BaseEntity {
     @Column(name="status")
     private int status;
 
-
-    @ManyToOne              //Arabanın modelini tutmalıyız. bir modelin çokça arabası olabilir
-    @JoinColumn(name="model_id") //FK
+    @ManyToOne
+    @JoinColumn(name="modelId")
     private Model model;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "rentalBranchId")
     private RentalBranch rentalBranch;
-
 
     @OneToMany(mappedBy = "car")
     private List<Rental> rentals;

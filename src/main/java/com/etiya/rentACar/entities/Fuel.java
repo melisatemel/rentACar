@@ -11,10 +11,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="fuels")
 public class Fuel extends BaseEntity {
 

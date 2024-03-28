@@ -36,7 +36,6 @@ public class BaseEntity {
     protected void onUpdate(){
         updatedDate = LocalDateTime.now();
     }
-
     @PreRemove
     protected void onDelete(){  //Delete işlemi olduğunda çalıştır.
         deletedDate = LocalDateTime.now();

@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity //bu class  bir veritabanı varlığısın
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="brands")
 
 public class Brand extends BaseEntity {
@@ -23,8 +23,8 @@ public class Brand extends BaseEntity {
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy = "brand")  //brand classından one to many gidecek models e
-    @JsonIgnore                     //tabloların sonsuz döngüye girmesini önler, belirli alanların dikkate alınmamasını sağlıyor
-    private List<Model> models;     //birden çok model olduğu için listeledik
+    @OneToMany(mappedBy = "brand")
+    @JsonIgnore
+    private List<Model> models;
 
 }

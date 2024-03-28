@@ -9,16 +9,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
-@Table(name="rentalBranchs")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="rental_branches")
 public class RentalBranch extends BaseEntity {
-    //şirket gibi ?
-    //city id,carid ile ilşişkili
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "cityId")
     private City city;
 

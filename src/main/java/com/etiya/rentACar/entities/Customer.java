@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.util.List;
 
-@Data   //Getter Setter varmış gibi davranması için kullanılır   ----->   LOMBOK
-@NoArgsConstructor      // Parametresiz constructor oluşturur
-@AllArgsConstructor     //Parametreli constructor   oluşturur
-@Entity     //veritabanı tablosudur
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 @Table(name="customers")
 public class Customer extends BaseEntity {
     @Column(name="fullName")
