@@ -32,40 +32,22 @@ public class BrandManager implements BrandService {
             //İş kuralları ayrıntılı yazılacak  managerların içinde if olmamalı
 
             Brand brand = this.modelMapperService.forRequest().map(createBrandRequest, Brand.class);    //.class obje çağırır
-            brandRepository.save(brand);
+            Brand savedBrand = brandRepository.save(brand);
 
-            CreatedBrandResponse response = this.modelMapperService.forResponse().map(brand, CreatedBrandResponse.class);
-            return response;
-
-/*
-        //mapping
-        Brand brand = new Brand();      //eklenecek brand nesnesi oluşturduk
-        brand.setName((createBrandRequest.getName()));  //eklenecek brand createBrandRequest'ten gelen name
-        brand.setCreatedDate(LocalDateTime.now());      //eklenecek brand LocalDateTime'den gelen tarih
-
-        Brand createdBrand = this.brandRepository.save(brand);
-
-        //mapping
-        CreatedBrandResponse createdBrandResponse = new CreatedBrandResponse();
-        createdBrandResponse.setId(createdBrand.getId());
-        createdBrandResponse.setName((createdBrand.getName()));
-        createdBrandResponse.setCreatedDate(createdBrand.getCreatedDate());
-
-        return createdBrandResponse;*/
+        return this.modelMapperService.forResponse().map(savedBrand, CreatedBrandResponse.class);
 
     }
 
-    public UpdatedBrandResponse update(UpdateBrandRequest brand) {
-        brandBusinessRules.brandNameCannotBeDuplicated(brand.getName());
-        Brand brandToUpdate = brandRepository.findById(brand.getId()).orElseThrow(()->new IllegalArgumentException("Brand not found!")); //hata fırlatma orElseThrow
+    public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest) {
+        brandBusinessRules.brandIdMustBeExists(updateBrandRequest.getId());
+        brandBusinessRules.brandNameCannotBeDuplicated(updateBrandRequest.getName());
+        Brand brandToUpdate = brandRepository.findById(updateBrandRequest.getId()).get();
 
-        this.modelMapperService.forRequest().map(brand,brandToUpdate);
+        this.modelMapperService.forRequest().map(updateBrandRequest,brandToUpdate);
 
-        brandRepository.save(brandToUpdate);
+        Brand updatedBrand = brandRepository.save(brandToUpdate);
 
-        UpdatedBrandResponse updatedBrandResponse = modelMapperService.forResponse().map(brandToUpdate,UpdatedBrandResponse.class);
-
-        return updatedBrandResponse;
+        return modelMapperService.forResponse().map(updatedBrand,UpdatedBrandResponse.class);
     }
 
     @Override
@@ -82,12 +64,14 @@ public class BrandManager implements BrandService {
 
     @Override
     public GetBrandResponse getById(int id) {   //
-        Brand brand = brandRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Brand not found"));
-        GetBrandResponse getBrandResponse =this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
-        return getBrandResponse;
+        brandBusinessRules.brandIdMustBeExists(id);
+        Brand brand = brandRepository.findById(id).get();
+
+        return this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
     }
     @Override
     public void delete(int id){
+        brandBusinessRules.brandIdMustBeExists(id);
         brandRepository.deleteById(id);
     }
 }

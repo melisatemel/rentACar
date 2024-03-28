@@ -21,5 +21,11 @@ public class BrandBusinessRules {
         }
     }
 
+    public void brandIdMustBeExists(int id){
+        if(!brandRepository.existsById(id)){
+            throw new BusinessException("Brand id must be exists");
+        }
+    }
+
 
 }

@@ -32,44 +32,45 @@ public class FuelManager implements FuelService {
         fuelBusinessRules.fuelNameCannotBeDuplicated(createFuelRequest.getName());
 
         Fuel fuel = this.modelMapperService.forRequest().map(createFuelRequest, Fuel.class);
-        //fuel.setCreatedDate(LocalDateTime.now());  Bunun yerine BaseEntity de alan tuttuk
 
-        fuelRepository.save(fuel);
+        Fuel savedFuel =  fuelRepository.save(fuel);
 
-        CreatedFuelResponse createdFuelResponse = this.modelMapperService.forResponse().map(fuel, CreatedFuelResponse.class);
-        return createdFuelResponse;
+        return this.modelMapperService.forResponse().map(savedFuel, CreatedFuelResponse.class);
     }
 
     @Override
     public UpdatedFuelResponse update(UpdateFuelRequest updateFuelRequest) {
+        fuelBusinessRules.fuelIdMustBeExists(updateFuelRequest.getId());
         fuelBusinessRules.fuelNameCannotBeDuplicated(updateFuelRequest.getName());
-        Fuel fuel = fuelRepository.findById(updateFuelRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
-        this.modelMapperService.forRequest().map(updateFuelRequest, fuel);
-        fuelRepository.save(fuel);
 
-        UpdatedFuelResponse updatedFuelResponse = modelMapperService.forResponse().map(fuel,UpdatedFuelResponse.class);
-        return updatedFuelResponse;
+        Fuel fuel = fuelRepository.findById(updateFuelRequest.getId()).get();
+
+        this.modelMapperService.forRequest().map(updateFuelRequest, fuel);
+        Fuel updatedFuel = fuelRepository.save(fuel);
+
+        return modelMapperService.forResponse().map(updatedFuel,UpdatedFuelResponse.class);
     }
 
     @Override
     public GetFuelResponse getById(int id) {
-        Fuel fuel = fuelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Fuel not found"));
-        GetFuelResponse getFuelResponse = this.modelMapperService.forResponse().map(fuel, GetFuelResponse.class);
+        fuelBusinessRules.fuelIdMustBeExists(id);
+        Fuel fuel = fuelRepository.findById(id).get();
 
-        return getFuelResponse;
+        return this.modelMapperService.forResponse().map(fuel, GetFuelResponse.class);
     }
 
     @Override
     public List<GetFuelListResponse> getAll() {
         List<Fuel> fuels = fuelRepository.findAll();
-        List<GetFuelListResponse> getFuelListResponses = fuels.stream().map(fuel ->
+        List<GetFuelListResponse> responses = fuels.stream().map(fuel ->
                 this.modelMapperService.forResponse().map(fuel,GetFuelListResponse.class)).collect(Collectors.toList());
-        return getFuelListResponses;
+        return responses;
     }
 
 
     @Override
     public void delete(int id) {
+        fuelBusinessRules.fuelIdMustBeExists(id);
         fuelRepository.deleteById(id);
     }
 }

@@ -30,45 +30,51 @@ public class RentalBranchManager implements RentalBranchService {
     @Override
     public List<GetRentalBranchListResponse> getAll() {
         List<RentalBranch> rentalBranches = rentalBranchRepository.findAll();
-        List<GetRentalBranchListResponse> getRentalBranchListResponses = rentalBranches.stream()
+        List<GetRentalBranchListResponse> responses = rentalBranches.stream()
                 .map(rentalBranch -> modelMapperService.forResponse()
                         .map(rentalBranch,GetRentalBranchListResponse.class)).collect(Collectors.toList());
-        return getRentalBranchListResponses;
+        return responses;
     }
 
     @Override
     public GetRentalBranchResponse getById(int id) {
         rentalBranchBusinessRules.isRentalBranchAvailable(id);
         RentalBranch rentalBranch = rentalBranchRepository.findById(id).get();
-        GetRentalBranchResponse getRentalBranchResponse = modelMapperService.forResponse()
+
+        return modelMapperService.forResponse()
                 .map(rentalBranch, GetRentalBranchResponse.class);
-        return getRentalBranchResponse;
     }
 
     @Override
     public CreatedRentalBranchResponse add(CreateRentalBranchRequest createRentalBranchRequest) {
-        RentalBranch rentalBranch = modelMapperService.forRequest().map(createRentalBranchRequest,RentalBranch.class);
+        rentalBranchBusinessRules.checkIfCityExists(createRentalBranchRequest.getCityId());
+        RentalBranch rentalBranch = modelMapperService.forRequest()
+                .map(createRentalBranchRequest,RentalBranch.class);
         RentalBranch savedRentalBranch = rentalBranchRepository.save(rentalBranch);
-        CreatedRentalBranchResponse createdRentalBranchResponse = modelMapperService.forResponse()
+
+        return modelMapperService.forResponse()
                 .map(savedRentalBranch,CreatedRentalBranchResponse.class);
-        return createdRentalBranchResponse;
     }
 
     @Override
     public UpdatedRentalBranchResponse update(UpdateRentalBranchRequest updateRentalBranchRequest) {
         rentalBranchBusinessRules.isRentalBranchAvailable(updateRentalBranchRequest.getId());
         rentalBranchBusinessRules.checkIfCityExists(updateRentalBranchRequest.getId());
+
         RentalBranch rentalBranch = rentalBranchRepository.findById(updateRentalBranchRequest.getId()).get();
-        RentalBranch mappedRentalBranch = modelMapperService.forRequest().map(updateRentalBranchRequest,RentalBranch.class);
+        RentalBranch mappedRentalBranch = modelMapperService.forRequest()
+                .map(updateRentalBranchRequest,RentalBranch.class);
+        //todo: check createdDate
         mappedRentalBranch.setCreatedDate(rentalBranch.getCreatedDate());
         RentalBranch savedRentalBranch = rentalBranchRepository.save(mappedRentalBranch);
-        UpdatedRentalBranchResponse updatedRentalBranchResponse = modelMapperService.forResponse()
+
+        return modelMapperService.forResponse()
                 .map(savedRentalBranch,UpdatedRentalBranchResponse.class);
-        return updatedRentalBranchResponse;
     }
 
     @Override
     public void delete(int id) {
+        //todo: soft delete için tüm deleteleri kontrol et
         rentalBranchBusinessRules.isRentalBranchAvailable(id);
         RentalBranch rentalBranch = rentalBranchRepository.findById(id).get();
         rentalBranch.setDeletedDate(LocalDateTime.now());

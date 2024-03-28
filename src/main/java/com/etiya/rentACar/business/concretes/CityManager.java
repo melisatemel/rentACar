@@ -27,41 +27,43 @@ public class CityManager implements CityService {
         cityBusinessRules.cityNAmeCannotBeDuplicated(createCityRequest.getName());
 
         City city = modelMapperService.forRequest().map(createCityRequest,City.class);
-        cityRepository.save(city);
+        City savedCity = cityRepository.save(city);
 
-        CreatedCityResponse createdCityResponse = modelMapperService.forResponse().map(city,CreatedCityResponse.class);
-        return createdCityResponse;
+        return modelMapperService.forResponse().map(savedCity,CreatedCityResponse.class);
     }
 
     @Override
     public UpdatedCityResponse update(UpdateCityRequest updateCityRequest) {
+        cityBusinessRules.cityIdMustBeExists(updateCityRequest.getId());
         cityBusinessRules.cityNAmeCannotBeDuplicated(updateCityRequest.getName());
-        City cityToUpdate = cityRepository.findById(updateCityRequest.getId()).orElseThrow(() ->
-                new IllegalArgumentException("City not found!"));
+        City cityToUpdate = cityRepository.findById(updateCityRequest.getId()).get();
 
         modelMapperService.forRequest().map(updateCityRequest,cityToUpdate);
-        cityRepository.save(cityToUpdate);
-        UpdatedCityResponse updatedCityResponse = modelMapperService.forResponse().map(cityToUpdate,UpdatedCityResponse.class);
-        return updatedCityResponse;
+        //todo: check createdDate
+        City updatedCity = cityRepository.save(cityToUpdate);
+
+        return modelMapperService.forResponse().map(updatedCity,UpdatedCityResponse.class);
     }
 
     @Override
     public List<GetCityListResponse> getAll() {
         List<City> cities = cityRepository.findAll();
-        List<GetCityListResponse> cityListResponses = cities.stream().map(city -> modelMapperService.forResponse()
+        List<GetCityListResponse> responses = cities.stream().map(city -> modelMapperService.forResponse()
                 .map(city, GetCityListResponse.class)).collect(Collectors.toList());
-        return cityListResponses;
+        return responses;
     }
 
     @Override
     public GetCityResponse getById(int id) {
-        City city = cityRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("City not found"));
-        GetCityResponse getCityResponse = modelMapperService.forResponse().map(city,GetCityResponse.class);
-        return getCityResponse;
+        cityBusinessRules.cityIdMustBeExists(id);
+        City city = cityRepository.findById(id).get();
+
+        return modelMapperService.forResponse().map(city,GetCityResponse.class);
     }
 
     @Override
     public void delete(int id) {
+        cityBusinessRules.cityIdMustBeExists(id);
         cityRepository.deleteById(id);
     }
 

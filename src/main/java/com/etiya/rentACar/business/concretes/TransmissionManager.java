@@ -30,45 +30,45 @@ public class TransmissionManager implements TransmissionService {
         transmissionBusinessRules.transmissionNameCannotBeDuplicated(createTransmissionRequest.getName());
 
         Transmission transmission = this.modelMapperService.forRequest().map(createTransmissionRequest,Transmission.class); //set ve get işlemlerini map()'in içerisinde yapıyoruz.
-        transmissionRepository.save(transmission);
+        Transmission savedTransmission = transmissionRepository.save(transmission);
 
-        CreatedTransmissionResponse createdTransmissionResponse = this.modelMapperService.forResponse().map(transmission,CreatedTransmissionResponse.class);    //veri eklenme işlemi başarılı olduysa burası döner.
-        return createdTransmissionResponse;
+        return this.modelMapperService.forResponse().map(savedTransmission,CreatedTransmissionResponse.class);
     }
 
     @Override
     public UpdatedTransmissionResponse update(UpdateTransmissionRequest updateTransmissionRequest) {
+        transmissionBusinessRules.transmissionIdMustBeExists(updateTransmissionRequest.getId());
         transmissionBusinessRules.transmissionNameCannotBeDuplicated(updateTransmissionRequest.getName());
 
         Transmission transmission = transmissionRepository.findById(updateTransmissionRequest.getId()).orElseThrow(() -> new IllegalArgumentException("Transmission not found"));
         this.modelMapperService.forRequest().map(updateTransmissionRequest,transmission);
 
-        transmissionRepository.save(transmission);
+        Transmission updatedTransmission =  transmissionRepository.save(transmission);
 
-        UpdatedTransmissionResponse updatedTransmissionResponse = modelMapperService.forResponse().map(transmission, UpdatedTransmissionResponse.class);
-
-        return updatedTransmissionResponse;
+        return modelMapperService.forResponse().map(updatedTransmission, UpdatedTransmissionResponse.class);
     }
 
     @Override
     public List<GetTransmissionListResponse> getAll() {
         List<Transmission> transmissions = transmissionRepository.findAll();
-        List<GetTransmissionListResponse> getTransmissionListResponses = transmissions.stream().map(transmission ->
+        List<GetTransmissionListResponse> responses = transmissions.stream().map(transmission ->
                 this.modelMapperService.forResponse().map(transmission,GetTransmissionListResponse.class)).collect(Collectors.toList());
 
-        return getTransmissionListResponses;
+        return responses;
     }
 
     @Override
     public GetTransmissionResponse getById(int id) {
-        Transmission transmission = transmissionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Transmission not found"));
-        GetTransmissionResponse getTransmissionResponse = this.modelMapperService.forResponse().map(transmission,GetTransmissionResponse.class);
-        return getTransmissionResponse;
+        transmissionBusinessRules.transmissionIdMustBeExists(id);
+        Transmission transmission = transmissionRepository.findById(id).get();
+
+        return this.modelMapperService.forResponse().map(transmission,GetTransmissionResponse.class);
     }
 
 
     @Override
     public void delete(int id) {
+        transmissionBusinessRules.transmissionIdMustBeExists(id);
         transmissionRepository.deleteById(id);
     }
 }

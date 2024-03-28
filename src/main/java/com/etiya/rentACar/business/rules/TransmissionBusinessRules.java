@@ -20,4 +20,10 @@ public class TransmissionBusinessRules {
         }
     }
 
+    public void transmissionIdMustBeExists(int id){
+        if(!transmissionRepository.existsById(id)){
+            throw new BusinessException("Transmission id must be exists");
+        }
+    }
+
 }

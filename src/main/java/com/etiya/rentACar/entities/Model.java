@@ -23,10 +23,6 @@ public class Model extends BaseEntity {
     @JoinColumn(name="brandId")
     private Brand brand;
 
-    @OneToMany(mappedBy = "model")
-    @JsonIgnore
-    private List<Car> cars;
-
     @ManyToOne()
     @JoinColumn(name="transmissionId")
     private Transmission transmission;
@@ -34,4 +30,6 @@ public class Model extends BaseEntity {
     @ManyToOne()
     @JoinColumn(name="fuelId")
     private Fuel fuel;
-}
+
+    @OneToMany(mappedBy = "model")
+    private List<Car> cars;}

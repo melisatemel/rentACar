@@ -16,6 +16,9 @@ import java.util.List;
 @Table(name="rentalBranches")
 public class RentalBranch extends BaseEntity {
 
+    @Column(name="name")
+    private String name;
+
     @ManyToOne()
     @JoinColumn(name = "cityId")
     private City city;

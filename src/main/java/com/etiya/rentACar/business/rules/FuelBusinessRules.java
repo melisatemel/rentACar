@@ -19,4 +19,10 @@ public class FuelBusinessRules {
             throw new BusinessException("Fuel Exists");
         }
     }
+
+    public void fuelIdMustBeExists(int id){
+        if(!fuelRepository.existsById(id)){
+            throw new BusinessException("Fuel id must be exists");
+        }
+    }
 }

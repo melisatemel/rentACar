@@ -2,7 +2,6 @@ package com.etiya.rentACar.business.rules;
 
 import com.etiya.rentACar.core.exceptions.types.BusinessException;
 import com.etiya.rentACar.dataAccess.abstracts.CityRepository;
-import com.etiya.rentACar.entities.Brand;
 import com.etiya.rentACar.entities.City;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,12 @@ public class CityBusinessRules {
         Optional<City> city = cityRepository.findById(id);
         if(city.isEmpty()){
             throw new BusinessException("City not found");
+        }
+    }
+
+    public void cityIdMustBeExists(int id){
+        if(!cityRepository.existsById(id)){
+            throw new BusinessException("City id must be exists");
         }
     }
 
