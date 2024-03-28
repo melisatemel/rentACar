@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="rental_branches")
+@Table(name="rentalBranches")
 public class RentalBranch extends BaseEntity {
 
     @ManyToOne()
