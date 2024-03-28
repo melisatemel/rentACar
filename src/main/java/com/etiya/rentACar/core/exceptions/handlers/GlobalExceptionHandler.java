@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,17 +32,18 @@ public class GlobalExceptionHandler {
     @ResponseStatus(code=HttpStatus.BAD_REQUEST)
     public ValidationProblemDetails handleValidationException(MethodArgumentNotValidException exception){
 
-        List<Map<String,String>> errorList =
-        exception.getBindingResult().getFieldErrors().stream().map(      //Reflection yöntemi
-                fieldError -> {
-                    Map<String,String> validationError = new HashMap<>();
-                    validationError.put(fieldError.getField(),fieldError.getDefaultMessage());  //eşleştirme gerektiği için map kullanılır.
-                    return validationError; //map return edilmez
-                }).collect(Collectors.toList());
+        List<Map<String, String>> validationErrors = new ArrayList<>();
+
+        exception.getBindingResult().getFieldErrors().forEach(fieldError -> {
+            Map<String, String> validationError = new HashMap<>();
+            validationError.put("field", fieldError.getField());
+            validationError.put("message", fieldError.getDefaultMessage());
+            validationErrors.add(validationError);
+        });
 
 
         ValidationProblemDetails validationProblemDetails = new ValidationProblemDetails();
-        validationProblemDetails.setErrors(errorList);
+        validationProblemDetails.setErrors(validationErrors);
         return validationProblemDetails;    //Dönüş tipi liste olamaz çünkü map tutuyor
     }
 

@@ -18,5 +18,6 @@ public interface RentalBranchService {
 
     UpdatedRentalBranchResponse update(UpdateRentalBranchRequest updateRentalBranchRequest);
 
+    void rentalBranchIdMustBeExists(int id);
     void delete(int id);
 }

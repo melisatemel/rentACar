@@ -19,5 +19,6 @@ public interface CustomerService {
 
     GetCustomerResponse getById(int id);
 
+    void customerIdMustBeExists(int id);
     void delete(int id);
 }

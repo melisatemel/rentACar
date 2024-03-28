@@ -42,4 +42,9 @@ public class CustomerBusinessRules {
         }
     }
 
+    public void customerIdMustBeExists(int id) {
+        if (!customerRepository.existsById(id)) {
+            throw new BusinessException("Customer id must be exists");
+        }
+    }
 }

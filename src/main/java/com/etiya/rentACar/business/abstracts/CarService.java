@@ -6,6 +6,7 @@ import com.etiya.rentACar.business.dtos.responses.car.CreatedCarResponse;
 import com.etiya.rentACar.business.dtos.responses.car.GetCarListResponse;
 import com.etiya.rentACar.business.dtos.responses.car.GetCarResponse;
 import com.etiya.rentACar.business.dtos.responses.car.UpdatedCarResponse;
+import com.etiya.rentACar.entities.Car;
 
 import java.util.List;
 
@@ -17,5 +18,9 @@ public interface CarService {
 
     List<GetCarListResponse> getAll();
 
+    void carIdMustBeExists(int id);
+    Car carStatusUpdate(int id, int status);
+
+    boolean carStatusIsAvailable(int id);
     void delete(int id);
 }

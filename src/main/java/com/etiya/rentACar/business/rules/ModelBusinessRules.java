@@ -22,4 +22,10 @@ public class ModelBusinessRules {
             throw new BusinessException("Model Exists");
         }
     }
+
+    public void modelIdMustBeExists(int id) {
+        if (!modelRepository.existsById(id)) {
+            throw new BusinessException("Model id must be exists");
+        }
+    }
 }

@@ -17,5 +17,6 @@ public interface BrandService {
     List<GetBrandListResponse> getAll();    //markaları listelemek için (yanıt)
     GetBrandResponse getById(int id);
 
+    void brandIdMustBeExists(int id);
     void delete(int id);
 }

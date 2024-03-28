@@ -15,4 +15,5 @@ public class UpdateCarRequest {
     private int status;
     private double dailyPrice;
     private int modelId;
+    private int rentalBranchId;
 }

@@ -23,6 +23,6 @@ public class RentalBranchBusinessRules {
     }
 
     public void checkIfCityExists(int id){
-        cityService.isCityAvailable(id);
+        cityService.cityIdMustBeExists(id);
     }
 }

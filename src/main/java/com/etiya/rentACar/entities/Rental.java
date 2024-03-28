@@ -4,11 +4,13 @@ import com.etiya.rentACar.core.entities.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,6 +18,8 @@ import java.util.List;
 @Table(name="rentals")
 public class Rental extends BaseEntity {
 
+    @Column(name = "subTotalPrice")
+    private double subTotalPrice;
 
     @Column(name="startDate")
     private LocalDateTime startDate;

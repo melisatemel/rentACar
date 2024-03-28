@@ -33,46 +33,50 @@ public class CustomerManager implements CustomerService {
         customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
 
         Customer customerToAdd = modelMapperService.forRequest().map(customer, Customer.class);
-        customerRepository.save(customerToAdd);
+        Customer createdCustomer = customerRepository.save(customerToAdd);
 
-        CreatedCustomerResponse response = modelMapperService.forResponse().map(customerToAdd, CreatedCustomerResponse.class);
-        return response;
+        return modelMapperService.forResponse().map(createdCustomer, CreatedCustomerResponse.class);
     }
 
     @Override
     public UpdatedCustomerResponse update(UpdateCustomerRequest customer) {
+        customerBusinessRules.customerIdMustBeExists(customer.getId());
         customerBusinessRules.customerNationalIdCannotBeDuplicated(customer.getNationalId());
         customerBusinessRules.customerEmailCannotBeDuplicated(customer.getEmail());
         customerBusinessRules.customerPhoneCannotBeDuplicated(customer.getPhone());
         customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
 
-        Customer customerToUpdate = customerRepository.findById(customer.getId()).orElseThrow(() -> new IllegalArgumentException("Customer not found!"));
+        Customer customerToUpdate = customerRepository.findById(customer.getId()).get();
         modelMapperService.forRequest().map(customer, customerToUpdate);
-        customerRepository.save(customerToUpdate);
+        Customer updatedCustomer = customerRepository.save(customerToUpdate);
 
-        UpdatedCustomerResponse response = modelMapperService.forResponse().map(customerToUpdate, UpdatedCustomerResponse.class);
-        return response;
+        return modelMapperService.forResponse().map(updatedCustomer, UpdatedCustomerResponse.class);
     }
 
     @Override
     public List<GetCustomerListResponse> getAll() {
         List<Customer> customers = customerRepository.findAll();
-        List<GetCustomerListResponse> customerListResponses = customers.stream()
+
+        return customers.stream()
                 .map(customer -> modelMapperService.forResponse()
                         .map(customer, GetCustomerListResponse.class)).collect(Collectors.toList());
-
-        return customerListResponses;
     }
 
     @Override
     public GetCustomerResponse getById(int id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Customer not found!"));
-        GetCustomerResponse response = modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
-        return response;
+        customerBusinessRules.customerIdMustBeExists(id);
+        Customer customer = customerRepository.findById(id).get();
+        return modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
+    }
+
+    @Override
+    public void customerIdMustBeExists(int id) {
+        customerBusinessRules.customerIdMustBeExists(id);
     }
 
     @Override
     public void delete(int id) {
+        customerBusinessRules.customerIdMustBeExists(id);
         customerRepository.deleteById(id);
     }
 }

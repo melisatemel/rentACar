@@ -35,6 +35,12 @@ public class RentalsController {
         rentalService.add(createRentalRequest);
     }
 
+    @PostMapping("/return/{id}")
+    public void returnCar(@PathVariable int id){
+        //todo: implement returnCar method in RentalService
+       // rentalService.returnCar(id);
+    }
+
     @PutMapping
     public void update(@RequestBody @Valid UpdateRentalRequest updateRentalRequest){
         rentalService.update(updateRentalRequest);

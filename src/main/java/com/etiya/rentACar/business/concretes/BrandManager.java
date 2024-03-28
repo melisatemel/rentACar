@@ -69,6 +69,12 @@ public class BrandManager implements BrandService {
 
         return this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
     }
+
+    @Override
+    public void brandIdMustBeExists(int id) {
+        brandBusinessRules.brandIdMustBeExists(id);
+    }
+
     @Override
     public void delete(int id){
         brandBusinessRules.brandIdMustBeExists(id);

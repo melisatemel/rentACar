@@ -51,10 +51,9 @@ public class TransmissionManager implements TransmissionService {
     @Override
     public List<GetTransmissionListResponse> getAll() {
         List<Transmission> transmissions = transmissionRepository.findAll();
-        List<GetTransmissionListResponse> responses = transmissions.stream().map(transmission ->
-                this.modelMapperService.forResponse().map(transmission,GetTransmissionListResponse.class)).collect(Collectors.toList());
 
-        return responses;
+        return transmissions.stream().map(transmission ->
+                this.modelMapperService.forResponse().map(transmission,GetTransmissionListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
@@ -63,6 +62,11 @@ public class TransmissionManager implements TransmissionService {
         Transmission transmission = transmissionRepository.findById(id).get();
 
         return this.modelMapperService.forResponse().map(transmission,GetTransmissionResponse.class);
+    }
+
+    @Override
+    public void transmissionIdMustBeExists(int id) {
+        transmissionBusinessRules.transmissionIdMustBeExists(id);
     }
 
 

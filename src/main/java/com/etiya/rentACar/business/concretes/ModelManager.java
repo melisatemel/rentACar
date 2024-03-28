@@ -31,73 +31,68 @@ public class ModelManager implements ModelService {
     private ModelRepository modelRepository;
     private final ModelMapperService modelMapperService;
     private ModelBusinessRules modelBusinessRules;
+    private BrandService brandService;
+    private FuelService fuelService;
+    private TransmissionService transmissionService;
 
     @Override
     public CreatedModelResponse add(CreateModelRequest createModelRequest) {
+        brandService.brandIdMustBeExists(createModelRequest.getBrandId());
+        fuelService.fuelIdMustBeExists(createModelRequest.getFuelId());
+        transmissionService.transmissionIdMustBeExists(createModelRequest.getTransmissionId());
         modelBusinessRules.modelNameCannotBeDuplicated(createModelRequest.getName());
 
-
         Model model = this.modelMapperService.forRequest().map(createModelRequest,Model.class);
-        modelRepository.save(model);
-        CreatedModelResponse createdModelResponse = this.modelMapperService.forResponse().map(model,CreatedModelResponse.class);
+        Model createdModel = modelRepository.save(model);
 
-        return createdModelResponse;
+        return this.modelMapperService.forResponse().map(createdModel,CreatedModelResponse.class);
     }
 
     @Override
     public UpdatedModelResponse update(UpdateModelRequest updateModelRequest) {
+        modelBusinessRules.modelIdMustBeExists(updateModelRequest.getId());
+        brandService.brandIdMustBeExists(updateModelRequest.getBrandId());
+        fuelService.fuelIdMustBeExists(updateModelRequest.getFuelId());
+        transmissionService.transmissionIdMustBeExists(updateModelRequest.getTransmissionId());
         modelBusinessRules.modelNameCannotBeDuplicated(updateModelRequest.getName());
 
 
-        Model model = modelRepository.findById(updateModelRequest.getId())
-                .orElseThrow(() -> new IllegalArgumentException("Model not found"));
+        Model existingModel = modelRepository.findById(updateModelRequest.getId()).get();
+
+        this.modelMapperService.forRequest().map(updateModelRequest,existingModel);
 
 
+        Model updatedMode = modelRepository.save(existingModel);
 
-//        this.modelMapperService.forRequest().map(updateModelRequest, model);
-        model.setName(updateModelRequest.getName());
-
-        Transmission transmission = new Transmission();
-        transmission.setId(updateModelRequest.getTransmissionId());
-        model.setTransmission(transmission);
-
-        Fuel fuel = new Fuel();
-        fuel.setId(updateModelRequest.getFuelId());
-        model.setFuel(fuel);
-
-        Brand brand = new Brand();
-        brand.setId(updateModelRequest.getBrandId());
-        model.setBrand(brand);
-
-        modelRepository.save(model);
-
-        UpdatedModelResponse updatedModelResponse = modelMapperService.forResponse().map(model, UpdatedModelResponse.class);
-        return updatedModelResponse;
+        return modelMapperService.forResponse().map(updatedMode, UpdatedModelResponse.class);
     }
 
     @Override
     public List<GetModelListResponse> getAll() {
         List<Model> models = modelRepository.findAll();
-        List<GetModelListResponse> modelListResponses = models.stream() //stream()
-                .map(model -> modelMapperService.forResponse().map(model, GetModelListResponse.class))
-                   //döngü işlemleri yapılır                //dönüşüm işlemi yapıyor
-                .collect(Collectors.toList());
 
-        return modelListResponses;
+        return models.stream()
+                .map(model -> modelMapperService.forResponse().map(model, GetModelListResponse.class))
+                .collect(Collectors.toList());
     }
 
     @Override
     public GetModelResponse getById(int id) {
+        modelBusinessRules.modelIdMustBeExists(id);
+        Model model = modelRepository.findById(id).get();
+        return this.modelMapperService.forResponse().map(model,GetModelResponse.class);
 
-        Model model = modelRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Model not found"));
-        GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model,GetModelResponse.class);
-        return getModelResponse;
+    }
 
+    @Override
+    public void modelIdMustBeExists(int id) {
+        modelBusinessRules.modelIdMustBeExists(id);
     }
 
 
     @Override
     public void delete(int id) {
+        modelBusinessRules.modelIdMustBeExists(id);
         modelRepository.deleteById(id);
     }
 }

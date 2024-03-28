@@ -1,5 +1,7 @@
 package com.etiya.rentACar.business.concretes;
 
+import com.etiya.rentACar.business.abstracts.CarService;
+import com.etiya.rentACar.business.abstracts.CustomerService;
 import com.etiya.rentACar.business.abstracts.RentalService;
 import com.etiya.rentACar.business.dtos.requests.rental.CreateRentalRequest;
 import com.etiya.rentACar.business.dtos.requests.rental.UpdateRentalRequest;
@@ -24,20 +26,34 @@ public class RentalManager implements RentalService {
     private final RentalRepository rentalRepository;
     private final ModelMapperService modelMapperService;
     private final RentalBusinessRules rentalBusinessRules;
+    private final CarService carService;
+    private final CustomerService customerService;
 
     @Override
     public CreatedRentalResponse add(CreateRentalRequest createRentalRequest) {
+
+        carService.carIdMustBeExists(createRentalRequest.getCarId());
+        customerService.customerIdMustBeExists(createRentalRequest.getCustomerId());
+        rentalBusinessRules.carStatusMustBeTrue(createRentalRequest.getCarId());
+
         Rental rental = modelMapperService.forRequest().map(createRentalRequest, Rental.class);
-        rentalRepository.save(rental);
-        return modelMapperService.forResponse().map(rental, CreatedRentalResponse.class);
+
+        rental.setStartKilometer(carService.carStatusUpdate(createRentalRequest.getCarId(), 2).getKilometer());
+
+        Rental createdRental = rentalRepository.save(rental);
+
+        return modelMapperService.forResponse().map(createdRental, CreatedRentalResponse.class);
 
     }
 
     @Override
     public UpdatedRentalResponse update(UpdateRentalRequest updateRentalRequest) {
         rentalBusinessRules.rentalIdMustBeExist(updateRentalRequest.getId());
+        carService.carIdMustBeExists(updateRentalRequest.getCarId());
+        customerService.customerIdMustBeExists(updateRentalRequest.getCustomerId());
+        Rental existingRental = rentalRepository.findById(updateRentalRequest.getId()).get();
 
-        Rental existingRental = rentalRepository.findById(updateRentalRequest.getId()).orElseThrow(() -> new RuntimeException("Rental not found"));
+
 
         modelMapperService.forRequest().map(updateRentalRequest, existingRental);
 

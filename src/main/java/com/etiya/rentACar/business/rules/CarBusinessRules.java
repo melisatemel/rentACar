@@ -29,4 +29,9 @@ public class CarBusinessRules {
         }
     }
 
+    public void carIdMustBeExists(int id) {
+        if (!carRepository.existsById(id)) {
+            throw new BusinessException("Car id must be exists");
+        }
+    }
 }

@@ -30,10 +30,10 @@ public class RentalBranchManager implements RentalBranchService {
     @Override
     public List<GetRentalBranchListResponse> getAll() {
         List<RentalBranch> rentalBranches = rentalBranchRepository.findAll();
-        List<GetRentalBranchListResponse> responses = rentalBranches.stream()
+
+        return rentalBranches.stream()
                 .map(rentalBranch -> modelMapperService.forResponse()
                         .map(rentalBranch,GetRentalBranchListResponse.class)).collect(Collectors.toList());
-        return responses;
     }
 
     @Override
@@ -70,6 +70,11 @@ public class RentalBranchManager implements RentalBranchService {
 
         return modelMapperService.forResponse()
                 .map(savedRentalBranch,UpdatedRentalBranchResponse.class);
+    }
+
+    @Override
+    public void rentalBranchIdMustBeExists(int id) {
+        rentalBranchBusinessRules.isRentalBranchAvailable(id);
     }
 
     @Override

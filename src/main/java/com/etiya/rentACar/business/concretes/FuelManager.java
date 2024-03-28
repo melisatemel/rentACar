@@ -67,6 +67,11 @@ public class FuelManager implements FuelService {
         return responses;
     }
 
+    @Override
+    public void fuelIdMustBeExists(int id) {
+        fuelBusinessRules.fuelIdMustBeExists(id);
+    }
+
 
     @Override
     public void delete(int id) {

@@ -22,5 +22,6 @@ public interface ModelService {
     List<GetModelListResponse> getAll();    //markaları listelemek için (yanıt)
     GetModelResponse getById(int id);
 
+    void modelIdMustBeExists(int id);
     void delete(int id);
 }

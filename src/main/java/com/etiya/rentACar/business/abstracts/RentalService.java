@@ -22,4 +22,5 @@ public interface RentalService {
 
     void delete(int id);
 
+
 }

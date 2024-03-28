@@ -19,5 +19,6 @@ public interface TransmissionService {
 
     GetTransmissionResponse getById(int id);
 
+    void transmissionIdMustBeExists(int id);
     void delete(int id);
 }

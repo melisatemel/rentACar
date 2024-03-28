@@ -68,7 +68,7 @@ public class CityManager implements CityService {
     }
 
     @Override
-    public void isCityAvailable(int id) {
+    public void cityIdMustBeExists(int id) {
         cityBusinessRules.isCityAvailable(id);
     }
 }

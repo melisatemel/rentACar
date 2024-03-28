@@ -17,6 +17,6 @@ public interface FuelService {
 
     List<GetFuelListResponse> getAll();
 
-
+    void fuelIdMustBeExists(int id);
     void delete(int id);
 }
