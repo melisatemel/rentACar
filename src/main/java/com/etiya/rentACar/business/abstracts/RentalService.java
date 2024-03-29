@@ -1,6 +1,7 @@
 package com.etiya.rentACar.business.abstracts;
 
 import com.etiya.rentACar.business.dtos.requests.rental.CreateRentalRequest;
+import com.etiya.rentACar.business.dtos.requests.rental.ReturnRentalRequest;
 import com.etiya.rentACar.business.dtos.requests.rental.UpdateRentalRequest;
 import com.etiya.rentACar.business.dtos.responses.rental.CreatedRentalResponse;
 import com.etiya.rentACar.business.dtos.responses.rental.GetRentalListResponse;
@@ -19,7 +20,7 @@ public interface RentalService {
 
     GetRentalResponse getById(int id);
 
-
+    String returnCar(ReturnRentalRequest returnRentalRequest);
     void delete(int id);
 
 

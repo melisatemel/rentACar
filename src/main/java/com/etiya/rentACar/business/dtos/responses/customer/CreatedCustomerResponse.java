@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -13,6 +14,7 @@ public class CreatedCustomerResponse {
     private int id;
     private String fullName;
     private String email;
-    private LocalDateTime birthDate;
+    private String nationalNo;
+    private LocalDate birthDate;
     private LocalDateTime createdDate;
 }

@@ -12,5 +12,6 @@ import java.time.LocalDateTime;
 public class UpdatedRentalBranchResponse {
     private int id;
     private int cityId;
+    private String name;
     private LocalDateTime updatedDate;
 }

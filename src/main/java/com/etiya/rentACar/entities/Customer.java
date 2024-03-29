@@ -29,8 +29,8 @@ public class Customer extends BaseEntity {
     @Column(name="phone")
     private String phone;
 
-    @Column(name="nationalId")
-    private String nationalId;
+    @Column(name="nationalNo")
+    private String nationalNo;
 
     @Column(name="birthDate")
     private LocalDate birthDate;

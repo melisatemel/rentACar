@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor     //Parametreli constructor   oluşturur
 
 public class UpdateBrandRequest {
-    @NotNull                //Sen bunu boş geçiremezsin. Boş olursa hata verir  !Update yaparken id olmalı!
+    @NotNull               //Sen bunu boş geçiremezsin. Boş olursa hata verir  !Update yaparken id olmalı!
     private int id;
 
     @NotNull                //Sen bunu boş geçiremezsin. Boş olursa hata verir

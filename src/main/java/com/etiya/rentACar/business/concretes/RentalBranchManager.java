@@ -48,8 +48,11 @@ public class RentalBranchManager implements RentalBranchService {
     @Override
     public CreatedRentalBranchResponse add(CreateRentalBranchRequest createRentalBranchRequest) {
         rentalBranchBusinessRules.checkIfCityExists(createRentalBranchRequest.getCityId());
-        RentalBranch rentalBranch = modelMapperService.forRequest()
+
+
+        RentalBranch rentalBranch = this.modelMapperService.forRequest()
                 .map(createRentalBranchRequest,RentalBranch.class);
+        rentalBranch.setId(0);
         RentalBranch savedRentalBranch = rentalBranchRepository.save(rentalBranch);
 
         return modelMapperService.forResponse()
@@ -64,7 +67,7 @@ public class RentalBranchManager implements RentalBranchService {
         RentalBranch rentalBranch = rentalBranchRepository.findById(updateRentalBranchRequest.getId()).get();
         RentalBranch mappedRentalBranch = modelMapperService.forRequest()
                 .map(updateRentalBranchRequest,RentalBranch.class);
-        //todo: check createdDate
+
         mappedRentalBranch.setCreatedDate(rentalBranch.getCreatedDate());
         RentalBranch savedRentalBranch = rentalBranchRepository.save(mappedRentalBranch);
 

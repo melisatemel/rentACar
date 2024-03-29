@@ -13,11 +13,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor     //Parametreli constructor   oluşturur
 public class CreateCarRequest {
 
-    @NotBlank(message = "Model Year cannot be empty!")    //boş yada null olamaz
+    @NotNull(message = "Model Year cannot be null!")    //boş yada null olamaz
     private int modelYear;
 
     @NotBlank(message = "Plate cannot be empty!")
     private String plate;
+
+    private double kilometer;
 
     @NotNull(message = "Status cannot be empty!")
     private int status;

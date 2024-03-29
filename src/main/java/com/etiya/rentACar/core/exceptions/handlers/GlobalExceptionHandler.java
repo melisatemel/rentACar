@@ -17,11 +17,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
-
 public class GlobalExceptionHandler {
     @ExceptionHandler({BusinessException.class})    //instance oluştur
     @ResponseStatus(code= HttpStatus.BAD_REQUEST)
-
     public BusinessProblemDetails handleBusinessException(BusinessException businessException){
         BusinessProblemDetails businessProblemDetails = new BusinessProblemDetails();
         businessProblemDetails.setDetail(businessException.getMessage());
@@ -54,4 +52,7 @@ public class GlobalExceptionHandler {
         internalServerProblemDetails.setDetail(exception.getMessage()); //tekrar bakılacak
         return internalServerProblemDetails;
     }
+
+
+
 }

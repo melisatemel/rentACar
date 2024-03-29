@@ -7,6 +7,7 @@ import com.etiya.rentACar.business.dtos.responses.model.CreatedModelResponse;
 import com.etiya.rentACar.business.dtos.responses.model.GetModelListResponse;
 import com.etiya.rentACar.business.dtos.responses.model.GetModelResponse;
 import com.etiya.rentACar.business.dtos.responses.model.UpdatedModelResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,12 +31,12 @@ public class ModelsController {
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CreatedModelResponse add(@RequestBody CreateModelRequest createModelRequest){
+    public CreatedModelResponse add(@RequestBody @Valid CreateModelRequest createModelRequest){
 
         return modelService.add(createModelRequest);
     }
     @PutMapping
-    public UpdatedModelResponse update(@RequestBody UpdateModelRequest updateModelRequest){
+    public UpdatedModelResponse update(@RequestBody @Valid UpdateModelRequest updateModelRequest){
         return modelService.update(updateModelRequest);
     }
 

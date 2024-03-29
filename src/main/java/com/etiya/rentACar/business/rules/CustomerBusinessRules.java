@@ -15,8 +15,8 @@ public class CustomerBusinessRules {
 
     private CustomerRepository customerRepository;
 
-    public void customerNationalIdCannotBeDuplicated(String nationalId){
-        Optional<Customer> customer = customerRepository.findByNationalId(nationalId);
+    public void customerNationalIdCannotBeDuplicated(String nationalNo){
+        Optional<Customer> customer = customerRepository.findByNationalNo(nationalNo);
         if(customer.isPresent()){
             throw new BusinessException("Customer NationalId Exists");
         }
@@ -37,8 +37,8 @@ public class CustomerBusinessRules {
     }
 
     public void customerBirthDateCannotBeOlderThan18(LocalDate birthDate){
-        if(birthDate.isBefore(LocalDate.now().minusYears(18))){
-            throw new BusinessException("Customer BirthDate cannot be older than 18");
+        if(birthDate.isAfter(LocalDate.now().minusYears(18))) {
+            throw new BusinessException("Customer must be older than 18 years old");
         }
     }
 

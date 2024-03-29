@@ -12,7 +12,6 @@ import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.dataAccess.abstracts.BrandRepository;
 import com.etiya.rentACar.entities.Brand;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -39,8 +38,9 @@ public class BrandManager implements BrandService {
     }
 
     public UpdatedBrandResponse update(UpdateBrandRequest updateBrandRequest) {
-        brandBusinessRules.brandIdMustBeExists(updateBrandRequest.getId());
+        brandBusinessRules.brandIdMustExist(updateBrandRequest.getId());
         brandBusinessRules.brandNameCannotBeDuplicated(updateBrandRequest.getName());
+
         Brand brandToUpdate = brandRepository.findById(updateBrandRequest.getId()).get();
 
         this.modelMapperService.forRequest().map(updateBrandRequest,brandToUpdate);
@@ -52,19 +52,18 @@ public class BrandManager implements BrandService {
 
     @Override
     public List<GetBrandListResponse> getAll() {
-        List<Brand> brands = brandRepository.findAll(); //BrandServisimizin getAll u Repository mizin findAll unu çağırır
-        List<GetBrandListResponse> brandListResponses = brands.stream().map(brand ->    //stream içeride listleri geziyor forla
-                this.modelMapperService.forResponse()
-                        .map(brand,GetBrandListResponse.class)).collect(Collectors.toList());
+        List<Brand> brands = brandRepository.findAll();
 
-        //stream() = Liste varsa tek tek dolaşıyor.            map() = Her marka için bir mapleme yap(id,name)  collect()=
-        return brandListResponses;
+        return brands.stream()
+                .filter(brand -> brand.getDeletedDate() == null)
+                .map(brand -> this.modelMapperService.forResponse()
+                        .map(brand,GetBrandListResponse.class)).collect(Collectors.toList());
     }
 
 
     @Override
     public GetBrandResponse getById(int id) {   //
-        brandBusinessRules.brandIdMustBeExists(id);
+        brandBusinessRules.brandIdMustExist(id);
         Brand brand = brandRepository.findById(id).get();
 
         return this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
@@ -72,13 +71,15 @@ public class BrandManager implements BrandService {
 
     @Override
     public void brandIdMustBeExists(int id) {
-        brandBusinessRules.brandIdMustBeExists(id);
+        brandBusinessRules.brandIdMustExist(id);
     }
 
     @Override
     public void delete(int id){
-        brandBusinessRules.brandIdMustBeExists(id);
-        brandRepository.deleteById(id);
+        brandBusinessRules.brandIdMustExist(id);
+        Brand deletedBrand = brandRepository.findById(id).get();
+        deletedBrand.setDeletedDate(LocalDateTime.now());
+        brandRepository.save(deletedBrand);
     }
 }
 

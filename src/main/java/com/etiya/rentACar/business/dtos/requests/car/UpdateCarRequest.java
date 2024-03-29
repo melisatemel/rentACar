@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor     //Parametreli constructor   oluşturur
 public class UpdateCarRequest {
     private int id;
-    private String name;
     private int modelYear;
     private String plate;
+    private double kilometer;
     private int status;
     private double dailyPrice;
     private int modelId;

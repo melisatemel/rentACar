@@ -1,6 +1,7 @@
 package com.etiya.rentACar.business.dtos.requests.customer;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,9 +22,9 @@ public class CreateCustomerRequest {
     @NotBlank(message = "phone cannot be empty!")
     private String phone;
 
-    @NotBlank(message = "nationalId cannot be empty!")
-    private String nationalId;
+    @NotBlank(message = "nationalNo cannot be empty!")
+    private String nationalNo;
 
-    @NotBlank(message = "birthDate cannot be empty!")
+    @NotNull(message = "birthDate cannot be empty!")
     private LocalDate birthDate;
 }

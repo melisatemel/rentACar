@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 public class CreateRentalBranchRequest {
     @NotNull
     private int cityId;
+
+    private String name;
 }

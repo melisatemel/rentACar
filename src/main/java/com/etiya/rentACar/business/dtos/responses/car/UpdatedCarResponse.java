@@ -13,8 +13,10 @@ public class UpdatedCarResponse {
     private int id;
     private int modelYear;
     private String plate;
+    private double kilometer;
     private int state;
     private double dailyPrice;
     private int modelId;
+    private int rentalBranchId;
     private LocalDateTime updatedDate;
 }

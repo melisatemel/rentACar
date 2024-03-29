@@ -13,6 +13,7 @@ import com.etiya.rentACar.business.rules.CarBusinessRules;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.dataAccess.abstracts.CarRepository;
 import com.etiya.rentACar.entities.Car;
+import com.etiya.rentACar.entities.RentalBranch;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +56,10 @@ public class CarManager implements CarService {
 
         Car existingCar = carRepository.findById(updateCarRequest.getId()).get();
 
-        this.modelMapperService.forRequest().map(updateCarRequest,existingCar);
-        Car updatedCar = carRepository.save(existingCar);
+        Car updatedCar = this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
+
+        updatedCar.setCreatedDate(existingCar.getCreatedDate());
+        updatedCar = carRepository.save(updatedCar);
 
 
         return modelMapperService.forResponse().map(updatedCar,UpdatedCarResponse.class);
@@ -91,6 +94,12 @@ public class CarManager implements CarService {
     }
 
     @Override
+    public Car getCarById(int id) {
+        carBusinessRules.carIdMustBeExists(id);
+        return carRepository.findById(id).get();
+    }
+
+    @Override
     public boolean carStatusIsAvailable(int id) {
         Car car = carRepository.findById(id).get();
         return car.getStatus() == 1;
@@ -102,5 +111,22 @@ public class CarManager implements CarService {
         carBusinessRules.carIdMustBeExists(id);
         carRepository.deleteById(id);
 
+    }
+
+    @Override
+    public void carKilometerUpdate(int id, double endKilometer) {
+        carBusinessRules.carIdMustBeExists(id);
+        carRepository.findById(id).get().setKilometer(endKilometer);
+    }
+
+    @Override
+    public void carBranchUpdate(int id, int returnBranchId) {
+        carBusinessRules.carIdMustBeExists(id);
+        rentalBranchService.rentalBranchIdMustBeExists(returnBranchId);
+        RentalBranch rentalBranch = new RentalBranch();
+        rentalBranch.setId(returnBranchId);
+        Car car =  carRepository.findById(id).get();
+        car.setRentalBranch(rentalBranch);
+        carRepository.save(car);
     }
 }

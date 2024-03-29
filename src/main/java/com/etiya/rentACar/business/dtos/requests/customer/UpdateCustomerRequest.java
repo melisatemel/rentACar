@@ -15,6 +15,6 @@ public class UpdateCustomerRequest {
     private String fullName;
     private String email;
     private String phone;
-    private String nationalId;
+    private String nationalNo;
     private LocalDate birthDate;
 }

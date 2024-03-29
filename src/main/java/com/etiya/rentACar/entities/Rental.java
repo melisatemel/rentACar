@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,13 +23,13 @@ public class Rental extends BaseEntity {
     private double subTotalPrice;
 
     @Column(name="startDate")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
 
     @Column(name="endDate")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
 
     @Column(name="returnDate")
-    private LocalDateTime returnDate;
+    private LocalDate returnDate;
 
     @Column(name="startKilometer")
     private double startKilometer;

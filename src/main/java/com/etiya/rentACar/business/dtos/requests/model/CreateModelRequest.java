@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor      // Parametresiz constructor oluşturur
 @AllArgsConstructor     //Parametreli constructor   oluşturur
 public class CreateModelRequest {
+
     private String name;
 
     private int brandId;

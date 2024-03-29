@@ -13,4 +13,6 @@ public class UpdateRentalBranchRequest {
     private int id;
     @NotNull
     private int cityId;
+
+    private String name;
 }

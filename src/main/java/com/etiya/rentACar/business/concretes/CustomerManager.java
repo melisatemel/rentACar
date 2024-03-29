@@ -27,7 +27,7 @@ public class CustomerManager implements CustomerService {
 
     @Override
     public CreatedCustomerResponse add(CreateCustomerRequest customer) {
-        customerBusinessRules.customerNationalIdCannotBeDuplicated(customer.getNationalId());
+       customerBusinessRules.customerNationalIdCannotBeDuplicated(customer.getNationalNo());
         customerBusinessRules.customerEmailCannotBeDuplicated(customer.getEmail());
         customerBusinessRules.customerPhoneCannotBeDuplicated(customer.getPhone());
         customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
@@ -41,9 +41,6 @@ public class CustomerManager implements CustomerService {
     @Override
     public UpdatedCustomerResponse update(UpdateCustomerRequest customer) {
         customerBusinessRules.customerIdMustBeExists(customer.getId());
-        customerBusinessRules.customerNationalIdCannotBeDuplicated(customer.getNationalId());
-        customerBusinessRules.customerEmailCannotBeDuplicated(customer.getEmail());
-        customerBusinessRules.customerPhoneCannotBeDuplicated(customer.getPhone());
         customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
 
         Customer customerToUpdate = customerRepository.findById(customer.getId()).get();
@@ -67,6 +64,12 @@ public class CustomerManager implements CustomerService {
         customerBusinessRules.customerIdMustBeExists(id);
         Customer customer = customerRepository.findById(id).get();
         return modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
+    }
+
+    @Override
+    public Customer getCustomerById(int id) {
+        customerBusinessRules.customerIdMustBeExists(id);
+        return customerRepository.findById(id).get();
     }
 
     @Override

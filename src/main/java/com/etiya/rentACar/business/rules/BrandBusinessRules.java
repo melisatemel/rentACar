@@ -21,11 +21,18 @@ public class BrandBusinessRules {
         }
     }
 
-    public void brandIdMustBeExists(int id){
-        if(!brandRepository.existsById(id)){
-            throw new BusinessException("Brand id must be exists");
+    public void brandIdMustExist(int id){
+        Optional<Brand> brand = brandRepository.findById(id);
+        if(brand.isEmpty()){
+            throw new BusinessException("Brand not found");
+        }
+        else if(brand.get().getDeletedDate() != null){
+            throw new BusinessException("Brand not found");
         }
     }
+
+
+
 
 
 }

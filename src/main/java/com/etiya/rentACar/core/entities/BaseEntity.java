@@ -29,15 +29,13 @@ public class BaseEntity {
 
     //İnheritance edildiği için hangi işlemleri yapılacağı anlaşılıyor
     @PrePersist //Create işlemi olduğunda bu methodu çalıştır
-    protected void onCreate(){
+    public void onCreate(){
         createdDate = LocalDateTime.now();
     }
     @PreUpdate  //Update işlemi olduğunda methodu çalıştır
-    protected void onUpdate(){
+    public void onUpdate(){
         updatedDate = LocalDateTime.now();
     }
-    @PreRemove
-    protected void onDelete(){  //Delete işlemi olduğunda çalıştır.
-        deletedDate = LocalDateTime.now();
-    }
+
+
 }

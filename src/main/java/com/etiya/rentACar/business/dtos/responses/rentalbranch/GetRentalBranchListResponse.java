@@ -1,5 +1,6 @@
 package com.etiya.rentACar.business.dtos.responses.rentalbranch;
 
+import com.etiya.rentACar.business.dtos.responses.city.GetCityResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GetRentalBranchListResponse {
     private int id;
-    private int cityId;
+
+    private String name;
+    private GetCityResponse city;
+
 }

@@ -6,7 +6,6 @@ import com.etiya.rentACar.business.abstracts.ModelService;
 import com.etiya.rentACar.business.abstracts.TransmissionService;
 import com.etiya.rentACar.business.dtos.requests.model.CreateModelRequest;
 import com.etiya.rentACar.business.dtos.requests.model.UpdateModelRequest;
-import com.etiya.rentACar.business.dtos.responses.fuel.GetFuelListResponse;
 import com.etiya.rentACar.business.dtos.responses.model.CreatedModelResponse;
 import com.etiya.rentACar.business.dtos.responses.model.GetModelListResponse;
 import com.etiya.rentACar.business.dtos.responses.model.GetModelResponse;
@@ -14,10 +13,7 @@ import com.etiya.rentACar.business.dtos.responses.model.UpdatedModelResponse;
 import com.etiya.rentACar.business.rules.ModelBusinessRules;
 import com.etiya.rentACar.core.utilities.mapping.ModelMapperService;
 import com.etiya.rentACar.dataAccess.abstracts.ModelRepository;
-import com.etiya.rentACar.entities.Brand;
-import com.etiya.rentACar.entities.Fuel;
 import com.etiya.rentACar.entities.Model;
-import com.etiya.rentACar.entities.Transmission;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,12 +55,13 @@ public class ModelManager implements ModelService {
 
         Model existingModel = modelRepository.findById(updateModelRequest.getId()).get();
 
-        this.modelMapperService.forRequest().map(updateModelRequest,existingModel);
 
+        Model updatedModel = this.modelMapperService.forRequest().map(updateModelRequest, Model.class);
 
-        Model updatedMode = modelRepository.save(existingModel);
+        updatedModel.setCreatedDate(existingModel.getCreatedDate());
+        updatedModel = modelRepository.save(updatedModel);
 
-        return modelMapperService.forResponse().map(updatedMode, UpdatedModelResponse.class);
+        return modelMapperService.forResponse().map(updatedModel, UpdatedModelResponse.class);
     }
 
     @Override

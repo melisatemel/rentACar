@@ -21,6 +21,11 @@ public interface CarService {
     void carIdMustBeExists(int id);
     Car carStatusUpdate(int id, int status);
 
+    Car getCarById(int id);
     boolean carStatusIsAvailable(int id);
     void delete(int id);
+
+    void carKilometerUpdate(int id, double endKilometer);
+
+    void carBranchUpdate(int id, int returnBranchId);
 }
