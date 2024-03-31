@@ -29,8 +29,12 @@ public class CityBusinessRules {
     }
 
     public void cityIdMustBeExists(int id){
-        if(!cityRepository.existsById(id)){
-            throw new BusinessException("City id must be exists");
+        Optional<City> city = cityRepository.findById(id);
+        if(city.isEmpty()){
+            throw new BusinessException("City not found");
+        }
+        else if(city.get().getDeletedDate() != null){
+            throw new BusinessException("City not found");
         }
     }
 

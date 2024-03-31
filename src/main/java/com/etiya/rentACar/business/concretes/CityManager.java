@@ -11,6 +11,7 @@ import com.etiya.rentACar.entities.City;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,20 +28,20 @@ public class CityManager implements CityService {
         cityBusinessRules.cityNAmeCannotBeDuplicated(createCityRequest.getName());
 
         City city = modelMapperService.forRequest().map(createCityRequest,City.class);
-        City savedCity = cityRepository.save(city);
+        cityRepository.save(city);
 
-        return modelMapperService.forResponse().map(savedCity,CreatedCityResponse.class);
+        CreatedCityResponse createdCityResponse = modelMapperService.forResponse().map(city,CreatedCityResponse.class);
+        return createdCityResponse;
     }
 
     @Override
     public UpdatedCityResponse update(UpdateCityRequest updateCityRequest) {
-        cityBusinessRules.cityIdMustBeExists(updateCityRequest.getId());
         cityBusinessRules.cityNAmeCannotBeDuplicated(updateCityRequest.getName());
-        City cityToUpdate = cityRepository.findById(updateCityRequest.getId()).get();
+        City existCity = cityRepository.findById(updateCityRequest.getId()).get();
+        City updatedCity = modelMapperService.forRequest().map(updateCityRequest,City.class);
 
-        modelMapperService.forRequest().map(updateCityRequest,cityToUpdate);
-        //todo: check createdDate
-        City updatedCity = cityRepository.save(cityToUpdate);
+        updatedCity.setCreatedDate(existCity.getCreatedDate());
+        updatedCity = cityRepository.save(updatedCity);
 
         return modelMapperService.forResponse().map(updatedCity,UpdatedCityResponse.class);
     }
@@ -48,23 +49,26 @@ public class CityManager implements CityService {
     @Override
     public List<GetCityListResponse> getAll() {
         List<City> cities = cityRepository.findAll();
-        List<GetCityListResponse> responses = cities.stream().map(city -> modelMapperService.forResponse()
-                .map(city, GetCityListResponse.class)).collect(Collectors.toList());
-        return responses;
+
+        return cities.stream()
+                .filter(city -> city.getDeletedDate() == null)
+                .map(city -> modelMapperService.forResponse()
+                        .map(city,GetCityListResponse.class)).collect(Collectors.toList());
     }
 
     @Override
     public GetCityResponse getById(int id) {
         cityBusinessRules.cityIdMustBeExists(id);
         City city = cityRepository.findById(id).get();
-
         return modelMapperService.forResponse().map(city,GetCityResponse.class);
     }
 
     @Override
     public void delete(int id) {
         cityBusinessRules.cityIdMustBeExists(id);
-        cityRepository.deleteById(id);
+        City deletedCity = cityRepository.findById(id).get();
+        deletedCity.setDeletedDate(LocalDateTime.now());
+        cityRepository.save(deletedCity);
     }
 
     @Override

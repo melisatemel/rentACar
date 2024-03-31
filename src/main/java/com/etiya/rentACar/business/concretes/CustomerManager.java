@@ -14,6 +14,7 @@ import com.etiya.rentACar.entities.Customer;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class CustomerManager implements CustomerService {
        customerBusinessRules.customerNationalIdCannotBeDuplicated(customer.getNationalNo());
         customerBusinessRules.customerEmailCannotBeDuplicated(customer.getEmail());
         customerBusinessRules.customerPhoneCannotBeDuplicated(customer.getPhone());
-        customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
+        customerBusinessRules.customerBirthDateCannotBeYoungerThan18(customer.getBirthDate());
 
         Customer customerToAdd = modelMapperService.forRequest().map(customer, Customer.class);
         Customer createdCustomer = customerRepository.save(customerToAdd);
@@ -41,11 +42,12 @@ public class CustomerManager implements CustomerService {
     @Override
     public UpdatedCustomerResponse update(UpdateCustomerRequest customer) {
         customerBusinessRules.customerIdMustBeExists(customer.getId());
-        customerBusinessRules.customerBirthDateCannotBeOlderThan18(customer.getBirthDate());
+        customerBusinessRules.customerBirthDateCannotBeYoungerThan18(customer.getBirthDate());
 
-        Customer customerToUpdate = customerRepository.findById(customer.getId()).get();
-        modelMapperService.forRequest().map(customer, customerToUpdate);
-        Customer updatedCustomer = customerRepository.save(customerToUpdate);
+        Customer existingCustomer = customerRepository.findById(customer.getId()).get();
+        Customer updatedCustomer = modelMapperService.forRequest().map(customer, Customer.class);
+        updatedCustomer.setCreatedDate(existingCustomer.getCreatedDate());
+        updatedCustomer = customerRepository.save(updatedCustomer);
 
         return modelMapperService.forResponse().map(updatedCustomer, UpdatedCustomerResponse.class);
     }
@@ -55,6 +57,7 @@ public class CustomerManager implements CustomerService {
         List<Customer> customers = customerRepository.findAll();
 
         return customers.stream()
+                .filter(customer -> customer.getDeletedDate() == null)
                 .map(customer -> modelMapperService.forResponse()
                         .map(customer, GetCustomerListResponse.class)).collect(Collectors.toList());
     }
@@ -66,11 +69,11 @@ public class CustomerManager implements CustomerService {
         return modelMapperService.forResponse().map(customer, GetCustomerResponse.class);
     }
 
-    @Override
-    public Customer getCustomerById(int id) {
-        customerBusinessRules.customerIdMustBeExists(id);
-        return customerRepository.findById(id).get();
-    }
+//    @Override
+//    public Customer getCustomerById(int id) {
+//        customerBusinessRules.customerIdMustBeExists(id);
+//        return customerRepository.findById(id).get();
+//    }
 
     @Override
     public void customerIdMustBeExists(int id) {
@@ -80,6 +83,8 @@ public class CustomerManager implements CustomerService {
     @Override
     public void delete(int id) {
         customerBusinessRules.customerIdMustBeExists(id);
-        customerRepository.deleteById(id);
+        Customer deletedCustomer = customerRepository.findById(id).get();
+        deletedCustomer.setDeletedDate(LocalDateTime.now());
+        customerRepository.save(deletedCustomer);
     }
 }

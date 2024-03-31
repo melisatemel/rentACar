@@ -20,7 +20,7 @@ public interface CustomerService {
 
     GetCustomerResponse getById(int id);
 
-    Customer getCustomerById(int id);
+//    Customer getCustomerById(int id);
     void customerIdMustBeExists(int id);
     void delete(int id);
 }
